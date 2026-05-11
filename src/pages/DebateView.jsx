@@ -4,6 +4,7 @@ import axios from 'axios'
 import toast from 'react-hot-toast'
 import DebateMessage from '../components/debate/DebateMessage'
 import { useAuth } from '../context/AuthContext'
+import API_BASE_URL from '../config';
 
 const DebateView = () => {
   const { id } = useParams()
@@ -14,7 +15,7 @@ const DebateView = () => {
   const [voting, setVoting] = useState(false)
 
   useEffect(() => {
-    axios.get(`http://localhost:5000/api/debate/${id}`)
+    axios.get(`${API_BASE_URL}/api/debate/${id}`)
       .then(res => setDebate(res.data))
       .catch(console.error)
       .finally(() => setLoading(false))
@@ -30,7 +31,7 @@ const DebateView = () => {
     setVoting(true)
     try {
       const res = await axios.post(
-        `http://localhost:5000/api/debate/vote/${id}`,
+        `${API_BASE_URL}/api/debate/vote/${id}`,
         { vote },
         { headers: { Authorization: `Bearer ${token}` } }
       )

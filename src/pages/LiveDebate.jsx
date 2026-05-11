@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import DebateMessage from '../components/debate/DebateMessage'
+import API_BASE_URL from '../config';
 
 const LiveDebate = () => {
   const location = useLocation()
@@ -28,7 +29,7 @@ const LiveDebate = () => {
   const startDebate = async () => {
     setStatus('streaming')
     try {
-      const response = await fetch('http://localhost:5000/api/debate/start', {
+      const response = await fetch(`${API_BASE_URL}/api/debate/start`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ topic, tone }),

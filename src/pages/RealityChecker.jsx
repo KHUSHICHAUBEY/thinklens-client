@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
+import API_BASE_URL from '../config';
 
 const EXAMPLE_SITUATIONS = [
   "Should I quit my job and start my own business?",
@@ -71,7 +72,7 @@ const RealityChecker = () => {
     setDone(false)
 
     try {
-      const response = await fetch('http://localhost:5000/api/reality/check', {
+      const response = await fetch(`${API_BASE_URL}/api/reality/check`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

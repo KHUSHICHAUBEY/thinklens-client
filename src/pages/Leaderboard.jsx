@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
+import API_BASE_URL from '../config';
 
 const Leaderboard = () => {
   const [debates, setDebates] = useState([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/debate/leaderboard')
+    axios.get(`${API_BASE_URL}/api/debate/leaderboard`)
       .then(res => setDebates(res.data))
       .catch(console.error)
       .finally(() => setLoading(false))

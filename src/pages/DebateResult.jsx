@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom'
 import axios from 'axios'
 import toast from 'react-hot-toast'
 import { useAuth } from '../context/AuthContext'
+import API_BASE_URL from '../config';
 
 const DebateResult = () => {
   const { id } = useParams()
@@ -15,7 +16,7 @@ const DebateResult = () => {
   useEffect(() => {
     const fetchDebate = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/debate/${id}`)
+        const res = await axios.get(`${API_BASE_URL}/api/debate/${id}`)
         setDebate(res.data)
       } catch { toast.error('Debate not found') }
       finally { setLoading(false) }
@@ -31,7 +32,7 @@ const DebateResult = () => {
     if (voted) return
     try {
       const res = await axios.post(
-        `http://localhost:5000/api/debate/vote/${id}`,
+        `${API_BASE_URL}/api/debate/vote/${id}`,
         { vote },
         { headers: { Authorization: `Bearer ${token}` } }
       )

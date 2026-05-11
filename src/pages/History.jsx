@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { useAuth } from '../context/AuthContext'
+import API_BASE_URL from '../config';
 
 const History = () => {
   const { token } = useAuth()
@@ -9,7 +10,7 @@ const History = () => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/debate/history', {
+    axios.get(`${API_BASE_URL}/api/debate/history`, {
       headers: { Authorization: `Bearer ${token}` }
     }).then(res => setDebates(res.data))
       .catch(console.error)

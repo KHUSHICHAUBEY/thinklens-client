@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import toast from 'react-hot-toast'
 import { useAuth } from '../context/AuthContext'
+import API_BASE_URL from '../config';
 
 const Register = () => {
   const [form, setForm] = useState({ username: '', email: '', password: '' })
@@ -16,7 +17,7 @@ const Register = () => {
     e.preventDefault()
     setLoading(true)
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/register', form)
+      const res = await axios.post(`${API_BASE_URL}/api/auth/register`, form)
       login(res.data.user, res.data.token)
       toast.success('Welcome to Debate Arena!')
       navigate('/dashboard')

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { useAuth } from '../context/AuthContext'
+import API_BASE_URL from '../config'
 
 const Dashboard = () => {
   const { user, token } = useAuth()
@@ -11,7 +12,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchDebates = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/debate/history', {
+        const res = await axios.get(`${API_BASE_URL}/api/debate/history`, {
           headers: { Authorization: `Bearer ${token}` }
         })
         setDebates(res.data.slice(0, 3))

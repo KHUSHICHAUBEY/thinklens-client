@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { useAuth } from '../context/AuthContext'
+import API_BASE_URL from '../config';
 
 const SECTION_CONFIG = {
   "PROS": { icon: "✅", color: "#22c55e", bg: "rgba(34,197,94,0.06)", border: "rgba(34,197,94,0.2)" },
@@ -45,7 +46,7 @@ const RealityHistory = () => {
   const [loadingDetail, setLoadingDetail] = useState(false)
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/reality/history', {
+    axios.get(`${API_BASE_URL}/api/reality/history`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => setHistory(res.data))
@@ -56,7 +57,7 @@ const RealityHistory = () => {
   const handleView = async (id) => {
     setLoadingDetail(true)
     try {
-      const res = await axios.get(`http://localhost:5000/api/reality/${id}`, {
+      const res = await axios.get(`${API_BASE_URL}/api/reality/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       })
       setSelected(res.data)
