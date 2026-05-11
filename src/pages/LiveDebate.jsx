@@ -13,6 +13,8 @@ const LiveDebate = () => {
   const [debateId, setDebateId] = useState(null)
   const [status, setStatus] = useState('connecting')
   const bottomRef = useRef(null)
+  const [verdict, setVerdict] = useState('')
+  const [verdictDone, setVerdictDone] = useState(false)
 
   useEffect(() => {
     if (!topic || !token) { navigate('/debate/new'); return }
@@ -81,6 +83,14 @@ const LiveDebate = () => {
               setTimeout(() => navigate(`/debate/${data.debateId}/result`), 1500)
             }
 
+            if (data.type === 'verdict_start') {
+            setStatus('verdict')
+            }
+
+            if (data.type === 'verdict_token') {
+            setVerdict(prev => prev + data.token)
+            }
+
             if (data.type === 'error') {
               setStatus('error')
             }
@@ -107,8 +117,8 @@ const LiveDebate = () => {
                 Round {currentRound} of {totalRounds} — <span style={{ color: currentSide === 'FOR' ? '#22c55e' : '#ef4444' }}>{currentSide} is arguing</span>
               </span>
             )}
-            {status === 'complete' && <span style={{ fontSize: '13px', color: '#22c55e' }}>✅ Debate Complete! Redirecting...</span>}
-          </div>
+{status === 'verdict' && <span style={{ fontSize: '13px', color: '#a78bfa' }}>⚖️ AI is analyzing the debate...</span>}
+{status === 'complete' && <span style={{ fontSize: '13px', color: '#22c55e' }}>✅ Debate Complete! Redirecting...</span>}          </div>
 
           {/* Progress */}
           <div style={{ display: 'flex', gap: '6px', justifyContent: 'center', marginTop: '16px' }}>
@@ -152,6 +162,32 @@ const LiveDebate = () => {
         </div>
 
         <div ref={bottomRef} />
+
+        {/* AI Verdict */}
+{(status === 'verdict' || verdict) && (
+  <div style={{
+    background: 'rgba(167,139,250,0.06)',
+    border: '1px solid rgba(167,139,250,0.3)',
+    borderRadius: '12px', padding: '20px 24px',
+    marginTop: '24px'
+  }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+      <span style={{ fontSize: '20px' }}>⚖️</span>
+      <span style={{ fontSize: '13px', fontWeight: 600, color: '#a78bfa', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+        AI Verdict
+      </span>
+      {status === 'verdict' && (
+        <span style={{ fontSize: '11px', color: '#64748b' }}>analyzing...</span>
+      )}
+    </div>
+    <p style={{ fontSize: '14px', color: '#e2e8f0', lineHeight: 1.7 }}>
+      {verdict}
+      {status === 'verdict' && (
+        <span style={{ display: 'inline-block', width: '2px', height: '14px', background: '#a78bfa', marginLeft: '2px', verticalAlign: 'middle' }} />
+      )}
+    </p>
+  </div>
+)}
 
         {status === 'error' && (
           <div className="card" style={{ textAlign: 'center', borderColor: '#ef4444', marginTop: '24px' }}>

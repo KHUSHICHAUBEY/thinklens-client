@@ -102,6 +102,7 @@ const Dashboard = () => {
             { to: '/history', icon: '📜', label: 'My Debates', desc: 'View all your past debates', color: '#22c55e' },
             { to: '/leaderboard', icon: '🏆', label: 'Leaderboard', desc: 'Most voted debates', color: '#f59e0b' },
             { to: '/profile', icon: '👤', label: 'My Profile', desc: 'Your account and stats', color: '#64748b' },
+            { to: '/reality-history', icon: '📋', label: 'Reality History', desc: 'View past situation analyses', color: '#a78bfa' },
             ].map((link) => (
             <Link
                 key={link.to}

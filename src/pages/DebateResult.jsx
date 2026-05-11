@@ -21,6 +21,10 @@ const DebateResult = () => {
       finally { setLoading(false) }
     }
     fetchDebate()
+
+    // Check if already voted
+    const votedDebates = JSON.parse(localStorage.getItem('votedDebates') || '[]')
+    if (votedDebates.includes(id)) setVoted(true)
   }, [id])
 
   const handleVote = async (vote) => {
@@ -33,6 +37,9 @@ const DebateResult = () => {
       )
       setDebate(prev => ({ ...prev, forVotes: res.data.forVotes, againstVotes: res.data.againstVotes }))
       setVoted(true)
+      // Save to localStorage
+      const votedDebates = JSON.parse(localStorage.getItem('votedDebates') || '[]')
+      localStorage.setItem('votedDebates', JSON.stringify([...votedDebates, id]))
       toast.success('Vote recorded!')
     } catch { toast.error('Could not record vote') }
   }
@@ -42,7 +49,7 @@ const DebateResult = () => {
 
   const total = debate.forVotes + debate.againstVotes
   const forPct = total ? Math.round((debate.forVotes / total) * 100) : 50
-  const againstPct = total ? Math.round((debate.againstVotes / total) * 100) : 50
+  const againstPct = 100 - forPct
   const winner = debate.forVotes > debate.againstVotes ? 'FOR' : debate.againstVotes > debate.forVotes ? 'AGAINST' : 'TIE'
 
   return (
@@ -58,13 +65,27 @@ const DebateResult = () => {
           <p style={{ color: '#94a3b8', fontSize: '14px' }}>"{debate.topic}"</p>
         </div>
 
+        {/* AI Verdict */}
+        {debate.verdict && (
+          <div style={{
+            background: 'rgba(167,139,250,0.06)', border: '1px solid rgba(167,139,250,0.3)',
+            borderRadius: '12px', padding: '20px 24px', marginBottom: '24px'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+              <span style={{ fontSize: '20px' }}>⚖️</span>
+              <span style={{ fontSize: '13px', fontWeight: 600, color: '#a78bfa', textTransform: 'uppercase', letterSpacing: '0.05em' }}>AI Verdict</span>
+            </div>
+            <p style={{ fontSize: '14px', color: '#e2e8f0', lineHeight: 1.7 }}>{debate.verdict}</p>
+          </div>
+        )}
+
         {/* Vote Bar */}
         <div className="card" style={{ marginBottom: '24px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
             <span style={{ color: '#22c55e', fontWeight: 600, fontSize: '14px' }}>✅ FOR {forPct}%</span>
             <span style={{ color: '#ef4444', fontWeight: 600, fontSize: '14px' }}>❌ AGAINST {againstPct}%</span>
           </div>
-          <div style={{ height: '12px', borderRadius: '6px', background: '#2a2a4a', overflow: 'hidden' }}>
+          <div style={{ height: '12px', borderRadius: '6px', background: '#1e3a5f', overflow: 'hidden' }}>
             <div style={{ height: '100%', width: `${forPct}%`, background: 'linear-gradient(90deg, #22c55e, #16a34a)', transition: 'width 0.8s ease' }} />
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '8px' }}>
@@ -87,8 +108,8 @@ const DebateResult = () => {
             </div>
           </div>
         ) : (
-          <div className="card" style={{ marginBottom: '24px', textAlign: 'center', borderColor: '#6c63ff' }}>
-            <p style={{ color: '#6c63ff', fontWeight: 500 }}>✅ Your vote has been recorded!</p>
+          <div className="card" style={{ marginBottom: '24px', textAlign: 'center', borderColor: '#0ea5e9' }}>
+            <p style={{ color: '#0ea5e9', fontWeight: 500 }}>✅ Your vote has been recorded!</p>
           </div>
         )}
 

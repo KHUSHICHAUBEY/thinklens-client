@@ -18,6 +18,7 @@ import Profile from './pages/Profile'
 import Leaderboard from './pages/Leaderboard'
 import NotFound from './pages/NotFound'
 import RealityChecker from './pages/RealityChecker'
+import RealityHistory from './pages/RealityHistory'
 
 function App() {
   return (
@@ -43,6 +44,7 @@ function App() {
               <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
               <Route path="*" element={<NotFound />} />
               <Route path="/reality-check" element={<ProtectedRoute><RealityChecker /></ProtectedRoute>} />
+              <Route path="/reality-history" element={<ProtectedRoute><RealityHistory /></ProtectedRoute>} />
             </Routes>
           </main>
           <Footer />
